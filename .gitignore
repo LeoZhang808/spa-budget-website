@@ -13,5 +13,6 @@ Thumbs.db
 .vscode/
 .idea/
 specs/
-
+.specify/
+.cursor/
 
