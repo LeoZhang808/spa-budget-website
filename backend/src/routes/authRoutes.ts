@@ -18,6 +18,7 @@ router.post('/register', authRateLimiter, async (req: Request, res: Response) =>
   const user = await authService.register(
     parsed.data.email,
     parsed.data.password,
+    req,
     res,
     parsed.data.display_name,
   );
@@ -30,7 +31,7 @@ router.post('/login', authRateLimiter, async (req: Request, res: Response) => {
     throw new AppError(400, 'VALIDATION', 'Invalid input', parsed.error.issues);
   }
 
-  const user = await authService.login(parsed.data.email, parsed.data.password, res);
+  const user = await authService.login(parsed.data.email, parsed.data.password, req, res);
   res.json({ data: toUserResponse(user) });
 });
 

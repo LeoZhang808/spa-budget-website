@@ -20,9 +20,10 @@ export function RegisterPage() {
       await register(email, password, displayName || undefined);
       navigate('/dashboard');
     } catch (err: unknown) {
+      const errData = (err as { response?: { data?: { error?: string | { message?: string } } } })
+        ?.response?.data?.error;
       const msg =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || 'Registration failed. Please try again.';
+        typeof errData === 'string' ? errData : errData?.message ?? 'Registration failed. Please try again.';
       setError(msg);
     } finally {
       setLoading(false);

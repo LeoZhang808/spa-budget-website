@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { userRepository } from '../repositories/userRepository';
 import { hashPassword, verifyPassword } from '../auth/password';
 import { createAccessToken, createRefreshToken, setAuthCookies, clearAuthCookies } from '../auth/jwt';
@@ -9,6 +9,7 @@ export const authService = {
   async register(
     email: string,
     password: string,
+    req: Request,
     res: Response,
     displayName?: string,
   ) {
@@ -24,7 +25,7 @@ export const authService = {
 
     const accessToken = createAccessToken(user.id);
     const refreshToken = createRefreshToken(user.id);
-    setAuthCookies(res, accessToken, refreshToken);
+    setAuthCookies(req, res, accessToken, refreshToken);
 
     return {
       id: user.id,
@@ -35,7 +36,7 @@ export const authService = {
     };
   },
 
-  async login(email: string, password: string, res: Response) {
+  async login(email: string, password: string, req: Request, res: Response) {
     const user = await userRepository.findByEmail(email);
     if (!user) {
       throw new AppError(401, 'UNAUTHORIZED', 'Invalid email or password');
@@ -48,7 +49,7 @@ export const authService = {
 
     const accessToken = createAccessToken(user.id);
     const refreshToken = createRefreshToken(user.id);
-    setAuthCookies(res, accessToken, refreshToken);
+    setAuthCookies(req, res, accessToken, refreshToken);
 
     return {
       id: user.id,

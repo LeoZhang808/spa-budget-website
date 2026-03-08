@@ -15,6 +15,8 @@ import dashboardRoutes from './routes/dashboardRoutes';
 
 const app = express();
 
+// Trust X-Forwarded-* headers from reverse proxy (nginx) for correct req.secure
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json());

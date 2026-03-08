@@ -19,9 +19,10 @@ export function LoginPage() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err: unknown) {
+      const errData = (err as { response?: { data?: { error?: string | { message?: string } } } })
+        ?.response?.data?.error;
       const msg =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || 'Login failed. Please try again.';
+        typeof errData === 'string' ? errData : errData?.message ?? 'Login failed. Please try again.';
       setError(msg);
     } finally {
       setLoading(false);

@@ -29,7 +29,7 @@ export function authenticate(req: Request, _res: Response, next: NextFunction): 
     try {
       const payload = verifyRefreshToken(refreshToken);
       const newAccessToken = createAccessToken(payload.userId);
-      setAuthCookies(_res, newAccessToken, refreshToken);
+      setAuthCookies(req, _res, newAccessToken, refreshToken);
       req.userId = payload.userId;
       next();
       return;
